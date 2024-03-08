@@ -357,7 +357,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("입력 확인", "${polyCalculus}")
         }
         //괄호 버튼 오류가 많습니다..
-        //현재 괄호 안에 괄호, 괄호 안에 계산 결괏값이 음수일경우 앱이 다운됩니다 ㅠㅠ
+        //현재 괄호 안에 괄호, 괄호 안에 계산 결괏값이 음수일경우 몇몇 경우를 제외하고는 앱이 다운됩니다 ㅠㅠ
         //괄호 계산용 계산기 오브젝트 추가하기
         var isLeftBracketUsed = false //
         // 왼쪽 오른쪽 괄호 구분 사용을 위해 설정
@@ -401,7 +401,26 @@ class MainActivity : AppCompatActivity() {
                 text = Screen.text.toString()
                 BracketCalCulus = text.substring(start, last+1)
                 inputCalculus(BracketCalCulus, BracketCalculator)
-                polyCalculus = polyCalculus + BracketCalCulus
+                   if(BracketCalCulus.toInt() < 0){
+                    if(Priority.contains(polyCalculus[polyCalculus.length-1]) == false) {
+                        BracketCalCulus = '0' + BracketCalCulus
+                    }
+                    else if(Priority.contains(polyCalculus[polyCalculus.length-1]) == true){
+                        var buffer = abs(BracketCalCulus.toInt())
+                        var buffer_2: String = "${polyCalculus[polyCalculus.length-2]}" + "${polyCalculus[polyCalculus.length-1]}"
+                        BracketCalCulus = "${buffer_2}" + "${buffer}" + "-" + "${buffer_2}" + "${2*buffer}"
+                        if(polyCalculus.length == 2) {
+                            polyCalculus = BracketCalCulus
+                        }
+                        else{
+                            var buffer_3 = polyCalculus.substring(0, polyCalculus.length-2)
+                            polyCalculus = buffer_3 + BracketCalCulus
+                        }
+                    }
+                }
+                else {
+                    polyCalculus = polyCalculus + BracketCalCulus
+                }
                 isBracketComplete = false
                 isBracketCreate = false
                 BracketCalculator.operand_1 = ""
